@@ -2,7 +2,7 @@
 
 //TODO:
 // email exists check, now it simply checks if the whole row exists (to avoid re register on refresh page)
-// test ical
+// add tracking system
 
 class Event{
 
