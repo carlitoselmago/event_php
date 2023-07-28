@@ -14,7 +14,9 @@ class HTML{
         <head>
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>'.$this->E->title().'</title>
+            
+
+            '.$this->opengraph().'
 
             <!--CSS-->';
             $this->set_template_chunk($this->template."extra_head.php");
@@ -36,6 +38,21 @@ class HTML{
         <article>
         
         ';
+    }
+
+    function opengraph(){
+        $H='
+        <title>'.$this->E->title().'</title>
+        <meta property="og:title" content="'.$this->E->title().'" />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="'.$this->E->getUrl().'" />';
+        //check if ogimage exists and alert if it doesn't
+        $ogimagepath="event_php/template/img/sm.jpg";
+        if(!is_file($ogimagepath)){
+            $this->E->var_dump("No SM ogimage detected");
+        }
+        $H.='<meta property="og:image" content="'.$this->E->getUrl().'event_php/template/img/sm.jpg" />';
+        return $H;
     }
 
     function bottom(){

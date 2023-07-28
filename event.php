@@ -1,6 +1,7 @@
 <?php
 
-//TODO: email exists check, now it doesn't do any check
+//TODO:
+// email exists check, now it simply checks if the whole row exists (to avoid re register on refresh page)
 // test ical
 
 class Event{
@@ -23,8 +24,7 @@ class Event{
 
     function loadSettings($path){
         $xml = simplexml_load_file($path);
-        //$json = json_encode($xml);
-        $array = $xml;//json_decode($json,TRUE);
+        $array = $xml;
         $this->settings=$array;
       
     }
@@ -39,10 +39,14 @@ class Event{
         if($_SERVER['REQUEST_METHOD'] == 'POST'){
 
             if ($this->processForm()){
+               
                 //ok
-                echo '<div class="message ok"><h3>'.$this->settings->messages->ok.'</h3></div>';
+                echo '<div class="message ok">';
+                echo '<h3>'.$this->settings->messages->ok.'</h3>';
+                echo '<a class="btn" href="/ics" target="_blank">'.$this->__("calendar").'</a>';
+                echo '</div>';
             } else {
-                //suer exists
+                //user exists
                 echo '<div class="message ko"><h3>'.$this->settings->messages->ko.'</h3></div>';
             }
 
@@ -145,7 +149,7 @@ class Event{
             //send an email to the user with the OK text
             if (isset($fields["email"])){
                 $subject=$this->__("registerok");
-                $body=$this->settings->messages->ok;
+                $body=$this->settings->messages->ok->__toString();
                 $dest=$fields["email"];
                 $sent=$this->sendMail($subject,$dest,$body);
             }
@@ -227,12 +231,13 @@ class Event{
         // Adjust for timezone if needed
         $dateStart->setTimezone(new DateTimeZone('Europe/Madrid')); 
     
-        $dateEnd = DateTime::createFromFormat('Y/m/d G:i', $event->dateend);
-        $dateEnd->setTimezone(new DateTimeZone('Europe/Madrid'));
-    
+        $dateStart = new DateTime($event->datestart, new DateTimeZone('Europe/Madrid'));
+        $dateEnd = new DateTime($event->dateend, new DateTimeZone('Europe/Madrid'));
+
         $icsContent = "BEGIN:VCALENDAR\r\n";
         $icsContent .= "VERSION:2.0\r\n";
         $icsContent .= "PRODID:-//hacksw/handcal//NONSGML v1.0//EN\r\n";
+        $icsContent .= "TZID:Europe/Madrid\r\n";
         $icsContent .= "BEGIN:VEVENT\r\n";
         $icsContent .= "UID:" . md5(uniqid(mt_rand(), true)) . "@example.com\r\n";
         $icsContent .= "DTSTAMP:" . gmdate('Ymd').'T'. gmdate('His') . "Z\r\n";
@@ -311,9 +316,13 @@ class Event{
         echo '</pre>';
     }
 
+    function getUrl(){
+        return (empty($_SERVER['HTTPS']) ? 'http' : 'https') . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+    }
+
     /***** locale *****/
     function __($string){
-        return $this->locale[$this->settings->lang->__toString()];
+        return $this->locale[$this->settings->lang->__toString()][$string];
     }
 }
 
