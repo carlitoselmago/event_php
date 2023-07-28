@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<program>
+    <e>
+        <time>12.00 - 12.05 h.</time>
+        <title>Títol</title>
+        <body><![CDATA[ html content here ]]></body>
+    </e>
+  
+    <e>
+        <time>12.10 - 12.30 h.</time>
+        <pretitle>TAULA RODONA</pretitle>
+        <title>Títol</title>
+        <body><![CDATA[ html content here  ]]></body>
+    </e>
+</program>

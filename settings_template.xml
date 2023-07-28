@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<settings>
+  <title>Nom del esdeveniment</title>
+
+  <lang>ca</lang>
+
+  <event>
+    <datestart>2023/8/13 12:00</datestart>
+    <dateend>2023/8/13 12:00</dateend>
+    <city>Barcelona</city>
+    <adress>Carrer</adress>
+    <venue>Sala d’actes ajuntament</venue>
+  </event>
+
+  <messages>
+      <ok>Gràcies</ok>
+      <ko>La teva adreça de correu electrònic ja ha estat utilitzada prèviament per inscriure's</ko>
+  </messages>
+
+  <database>
+      <host></host>
+      <user></user>
+      <password></password>
+      <dbname></dbname>
+      <table></table>
+  </database>
+
+  <fields>
+      <field required="true">
+          <name>nom</name>
+          <label>Nom</label>
+          <type>text</type>
+      </field>
+
+        <field required="true">
+          <name>cognoms</name>
+          <label>Cognoms</label>
+          <type>text</type>
+      </field>
+
+        <field required="true">
+          <name>entitat</name>
+          <label>Entitat, organització o institució</label>
+          <type>text</type>
+      </field>
+
+        <field required="false">
+          <name>carrec</name>
+          <label>Càrrec</label>
+          <type>text</type>
+      </field>
+
+        <field required="true">
+          <name>email</name>
+          <label>Correu electrònic</label>
+          <type>email</type>
+      </field>
+
+        <field required="true">
+          <name>telefon</name>
+          <label>Telèfon de contacte</label>
+          <type>phone</type>
+      </field>
+
+        <field required="false">
+          <name>conformitat</name>
+          <label>Accepto</label>
+          <type>checkbox</type>
+      </field>
+
+      
+  </fields>
+</settings>

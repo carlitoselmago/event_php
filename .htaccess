@@ -1,0 +1,4 @@
+<FilesMatch "\.(?:inc|xml|sh|py|rb)$">
+Order allow,deny
+Deny from all
+</FilesMatch>

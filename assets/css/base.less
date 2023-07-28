@@ -1,0 +1,126 @@
+/* responsive sizes */
+@desktop:1100px;
+@mobile:768px;
+
+
+html{
+    scroll-behavior: smooth;
+}
+body {
+    margin: 0px;
+    font-family: Arial;
+    background-color: lightgrey;
+}
+a{
+    color:inherit
+}
+nav{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    img{
+        max-height: 146px;
+        @media(max-width: @desktop) {
+            max-height: 78px;
+        }
+    }
+    a{
+        padding: 25px;
+        text-decoration: none;
+       
+    }
+}
+
+#main {
+    width: @desktop;
+    margin-left: auto;
+    margin-right: auto;
+
+    @media(max-width: @desktop) {
+       width: 100%;
+    }
+
+    article{
+        padding: 20px;
+    }
+}
+
+form {
+   
+    .field {
+        display: flex;
+        margin-bottom: 16px;
+        &.checkbox{
+            flex-direction: row-reverse;
+            input{
+                margin-right: 20px;
+            }
+        }
+
+        label{
+            margin-right: 10px;
+            @media(max-width: @desktop) {
+                margin-bottom: 5px;
+            }
+        }
+
+        input {
+            border-radius: 12px;
+            border: none;
+            padding: 10px;
+
+            &[type="submit"]{
+                padding: 10px 50px;
+                font-size: 28px;
+                &:hover{
+                    cursor: pointer;
+                }
+            }
+        }
+    }
+}
+
+.program {
+    .e {
+        display: flex;
+        margin-bottom: 22px;
+        padding-bottom: 22px;
+        border-bottom: solid 1px;
+
+        &:last-of-type{
+            border-bottom: none;
+            padding-bottom: 0px;
+        }
+
+        h1,
+        h2,
+        h3,
+        h4 {
+            margin: 0px;
+        }
+
+        .time {
+          
+            padding-right: 10px;
+            min-width: 150px;
+            @media(max-width: @desktop) {
+                font-size: 12px;
+                min-width: 94px;
+            }
+        }
+    }
+}
+
+.message{
+    padding:20px;
+    padding: 20px;
+    border: solid 3px white;
+    border-radius: 12px;
+}
+
+.flex{
+    display: flex;
+    &.vertical{
+        flex-direction: column;
+    }
+}
