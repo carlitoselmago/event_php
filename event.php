@@ -4,22 +4,25 @@
 // email exists check, now it simply checks if the whole row exists (to avoid re register on refresh page)
 // add tracking system
 
-class Event{
+class Event{ 
 
-    private $settings_path="event_php/settings.xml";
-    private $program_path="event_php/program.xml";
+    private $settings_path= __DIR__ ."/settings.xml";
+    private $program_path= __DIR__ ."/program.xml";
     private $settings=array();
     public $HTML;
-    private $conn=false;
+    private $conn=false; 
+    
+    //Registered users access
+    private $validPasswords = array('accesosi');
 
      function __construct() {
         $this->loadSettings($this->settings_path);
-        include_once("event_php/html.php");
+        include_once(__DIR__."/html.php");
         $this->HTML=new html($this);
         $this->urlManager();
 
         //load locale
-        include_once "event_php/locale.php";
+        include_once __DIR__."/locale.php";
      }
 
     function loadSettings($path){
@@ -283,6 +286,92 @@ class Event{
         }
 
     }
+
+    /**ADMIN*** */
+
+    function admin(){
+        $this->showregistered();
+
+    }
+
+    public function showregistered()
+    {
+        $count=0;
+        $table=$this->settings->database->table->__toString();
+        $query="SELECT * FROM ".$table;
+        $result = mysqli_query($this->db(), $query);
+
+        $H='';
+
+        $H.= '<table border="0">';
+      
+        // Header
+        $H.= '<tr>';
+        foreach($this->settings->fields->field as $field)
+        {
+            $H.= '<th>'.htmlspecialchars($field->label). '</th>';
+        }
+        $H.= '</tr>';
+
+        // Data
+        while($row = mysqli_fetch_assoc($result)) {
+            $count++;
+            $H.= '<tr>';
+            foreach($this->settings->fields->field as $field)
+            {
+                $name = $field->name->__toString();
+                if(isset($row[$name])) {
+                    $H.= '<td>'. htmlspecialchars($row[$name]). '</td>';
+                }
+                else {
+                    $H.= '<td></td>';
+                }
+            }
+            $H.= '</tr>';
+        }
+
+        $H.= '</table>';
+
+        echo '<h3 class="">#N registrados: <b>'.$count.'</b></h3>';
+        echo $H;
+    }
+
+    
+    function passwordProtect() {
+        if (isset($_POST['password'])){
+            $password=$_POST['password'];
+        }
+        
+        
+        if(!isset($password)) {
+            //Ask the user for a password if one isn't entered
+            echo "Please enter a password to view this page.";
+            echo '<!DOCTYPE html>
+            <html>
+            <head>
+                <title>Password Protected Page</title>
+            </head>
+            <body>
+                <form method="post" action="">
+                    <label for="password">Enter Password:</label><br>
+                    <input type="password" id="password" name="password"><br>
+                    <input type="submit" value="Submit">
+                </form>
+            </body>
+            </html>';
+            die();
+        }
+
+        //Check to see if the password is in our array of valid passwords
+        if(in_array($password, $this->validPasswords)) {
+            return true;
+        } else {
+            echo "Incorrect password. Please try again.";
+            die();
+        }   
+    }
+
+
 
     /*****HELPERS******/
 

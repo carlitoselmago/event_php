@@ -10,6 +10,10 @@ Also database table will be created automatically from the fields in settings.xm
 
 The event_php folder has a .htaccess that prevents accessing to xml files (for security reasons) if the web is on a nginx server do the equivalent in the .conf file of the website
 
+## TODO:
+- Add createdon field in _users in the createifnotexists
+- Develop an easier implementation of php-web-analytics
+
 ## Instructions
 
 - Create a file for custom css
