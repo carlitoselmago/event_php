@@ -36,7 +36,7 @@ class Event{
         return $this->settings->title;
     }
 
-    function form($before,$after){
+    function form($before="",$after=""){
 
         //check if form is sent
         if($_SERVER['REQUEST_METHOD'] == 'POST'){
