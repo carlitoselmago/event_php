@@ -156,6 +156,8 @@ class Event{
                 $dest=$fields["email"];
                 $sent=$this->sendMail($subject,$dest,$body);
             }
+        } else {
+            return false;
         }
 
         return true;
