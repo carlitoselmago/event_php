@@ -23,8 +23,8 @@ class HTML{
             echo '
             <link rel = "stylesheet/css" type="text/css" href="'.$this->assets.'css/fonts/fonts.css" />
             <link rel = "stylesheet/less" type="text/css" href="'.$this->assets.'css/base.less" />
-            <link rel = "stylesheet/less" type="text/css" href="'.$this->template.'fonts/fonts.css" />
-            <link rel = "stylesheet/less" type="text/css" href="'.$this->template.'template.less" />
+            <link rel = "stylesheet/less" type="text/css" href="/'.$this->template.'fonts/fonts.css" />
+            <link rel = "stylesheet/less" type="text/css" href="/'.$this->template.'template.less" />
             <script src="'.$this->assets.'js/less.js" ></script>
         </head>
         <body>
