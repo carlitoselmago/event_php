@@ -33,7 +33,7 @@ $E->HTML->head();
 
 //your content here
 
-$E->form();
+$E->form("REGÍSTRATE");
 
 //Other infos
 $E->program();
