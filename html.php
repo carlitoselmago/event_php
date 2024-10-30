@@ -3,6 +3,7 @@ class HTML{
 
     private $assets="/event_php/assets/";
     public $template="event_php/template/";
+    public $E; 
 
     function __construct($E) {
         $this->E=$E;
