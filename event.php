@@ -36,7 +36,7 @@ class Event{
         return $this->settings->title;
     }
 
-    function form($before="",$after=""){
+    function form($label="Regístrat",$before="",$after=""){
 
         //check if form is sent
         if($_SERVER['REQUEST_METHOD'] == 'POST'){
@@ -78,7 +78,7 @@ class Event{
                 echo '</div>';
             }
             echo '<div class="field submit">';
-            echo '<input type="submit" value="Enviar">'; //this line creates a submit button
+            echo '<input class="btn" type="submit" value="'.$label.'">'; //this line creates a submit button
             echo '</div>';
             echo '</form>'; //this line ends the form
 
