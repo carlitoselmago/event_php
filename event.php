@@ -11,6 +11,7 @@ class Event{
     private $settings=array();
     public $HTML;
     private $conn=false; 
+    public $locale;
     
     //Registered users access
     private $validPasswords = array('accesosi');
