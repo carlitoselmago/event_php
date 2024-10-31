@@ -180,47 +180,40 @@ class Event{
         return ($result && $result->num_rows > 0);
     }
 
-    function createTableIfnotExists($tableName){
-        
-        $check = mysqli_query($this->db(),'select 1 from $tableName LIMIT 1');
-
-        if($check !== FALSE)
-        {
-            //DO SOMETHING! IT EXISTS!
-            return true;
-        }
-        else
-        {
-            //does not exists
-            $query = "CREATE TABLE IF NOT EXISTS $tableName (id INT AUTO_INCREMENT PRIMARY KEY";
-
+    function createTableIfnotExists($tableName) {
+        try {
+            // Check if the table exists
+            $check = mysqli_query($this->db(), "SELECT 1 FROM `$tableName` LIMIT 1");
+            return true; // Table exists
+        } catch (mysqli_sql_exception $e) {
+            // Table does not exist, so we proceed to create it
+            $query = "CREATE TABLE IF NOT EXISTS `$tableName` (id INT AUTO_INCREMENT PRIMARY KEY";
+    
             // Loop over the fields
-            foreach($this->settings->fields->field as $field) 
-            {   
+            foreach ($this->settings->fields->field as $field) {   
                 $fieldName = $field->name;
-                $type = 'varchar(255)'; // Default data type
-
-                if($field->type == 'email' || $field->type == 'textarea') 
-                {
-                    $type = 'text';
-                } 
-                elseif($field->type == 'phone') 
-                {
-                    $type = 'varchar(30)';
+                $type = 'VARCHAR(255)'; // Default data type
+    
+                if ($field->type == 'email' || $field->type == 'textarea') {
+                    $type = 'TEXT';
+                } elseif ($field->type == 'phone') {
+                    $type = 'VARCHAR(30)';
                 }
-
+    
                 $query .= ", `$fieldName` $type";
             }
-
-            $query .= ")";
-        
-            if(!mysqli_query($this->db(),$query))
-            {
-                throw new Exception('Could not create table: ' . $db->error);
+    
+            $query .= ")"; // Close the CREATE TABLE statement
+    
+            // Execute the query to create the table
+            if (!mysqli_query($this->db(), $query)) {
+                throw new Exception('Could not create table: ' . mysqli_error($this->db()));
             }
-            return false;
+    
+            return false; // Table was created
         }
     }
+    
 
     public function ical(){
         $event=$this->settings->event;
