@@ -37,7 +37,7 @@ class Event{
         return $this->settings->title;
     }
 
-    function form($label="Regístrat",$before="",$after=""){
+    function form($action="Regístrat",$before="",$after=""){
 
         //check if form is sent
         if($_SERVER['REQUEST_METHOD'] == 'POST'){
@@ -56,9 +56,9 @@ class Event{
 
         } else {
 
-            echo $before;
+           
 
-            echo '<form action="#" method="post">'; //this line starts the form
+            echo '<div class="form"><form action="#" method="post">'.$before; //this line starts the form
             foreach($this->settings->fields->field as $f)
             {   
                 echo '<div class="field '.$f->type.'">';
@@ -79,11 +79,13 @@ class Event{
                 echo '</div>';
             }
             echo '<div class="field submit">';
-            echo '<input class="btn" type="submit" value="'.$label.'">'; //this line creates a submit button
+            echo '<input class="btn" type="submit" >'; //this line creates a submit button
             echo '</div>';
-            echo '</form>'; //this line ends the form
+            echo '</form>'.$after.'</div>'; //this line ends the form
 
-            echo $after;
+            echo '<a href="#" class="btn btn-big openform">'.$action.'</a>';
+
+            
         }
     }
 
