@@ -16,6 +16,8 @@ The event_php folder has a .htaccess that prevents accessing to xml files (for s
 
 ## Instructions
 
+- Clone/download the event_php respository in the root of the website, IMPORTANT: this is not meant to be the root itself, it should stay as a folder of /, and index.php should be created at the root, loading the class from the event_php folder
+
 - Create a file for custom css
 /template/template.less
 
@@ -43,3 +45,15 @@ $E->HTML->bottom();
 ```
 
 - Create the files in the eventphp root settings.xml and program.xml, use the templates as reference
+
+- Create a .htaccess at root so the ics files get processed with this:
+```
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteBase /
+    RewriteRule ^index\.php$ - [L]
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule . /index.php [L]
+</IfModule>
+```
