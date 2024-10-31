@@ -27,4 +27,13 @@ $(document).ready(function() {
         $(".form").hide(); // Esconde el formulario
         $(".close-btn").remove(); // Elimina el botón de cerrar
     });
+
+    // Acción para cerrar el formulario al hacer clic fuera de <form> pero dentro de .form
+    $(".form").on("click", function(event) {
+        // Cierra el formulario solo si el clic fue en .form y no dentro de <form>
+        if ($(event.target).is(".form")) {
+            $(".form").hide(); // Esconde el formulario
+            $(".close-btn").remove(); // Elimina el botón de cerrar
+        }
+    });
 });
