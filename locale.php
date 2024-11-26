@@ -1,4 +1,5 @@
 <?php
+
 $this->locale=[
     "ca"=>[
         "registerok"=>"Registre completat",

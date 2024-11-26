@@ -1,4 +1,5 @@
 assets/css/template.less
+template/
 template/*
 program.xml
 settings.xml

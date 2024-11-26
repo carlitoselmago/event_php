@@ -111,9 +111,10 @@ class Event{
 
     /***DB***/
     private function db(){
-        if (!$this->conn){
-            $this->conn = mysqli_connect($this->settings->database->host, $this->settings->database->user, $this->settings->database->password, $this->settings->database->dbname);
-        } 
+        if ($this->conn) {
+            mysqli_close($this->conn);
+        }
+        $this->conn = mysqli_connect($this->settings->database->host, $this->settings->database->user, $this->settings->database->password, $this->settings->database->dbname);
         return $this->conn;
      
     }
@@ -147,7 +148,7 @@ class Event{
             $query=substr($query, 0, -1);
             $query.=	')';
         
-            
+        
         //check if it's already inserted (page refresh)
         if (!$this->rowExists($fields)){
             $res=mysqli_query($this->db(),$query);

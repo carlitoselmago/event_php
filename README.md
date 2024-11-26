@@ -4,7 +4,7 @@ A class for making simple register for events with tracking landing pages
 ## Notes
 
 Some extra template files will be required, but they will create automatically and show their path
-Also database *table* will be created automatically from the fields in settings.xml
+Also database table will be created automatically from the fields in settings.xml
 
 ## Important
 
@@ -16,15 +16,13 @@ The event_php folder has a .htaccess that prevents accessing to xml files (for s
 
 ## Instructions
 
-- Clone/download the event_php respository in the root of the website, IMPORTANT: this is not meant to be the root itself, it should stay as a folder of /, and index.php should be created at the root, loading the class from the event_php folder
-
 - Create a file for custom css
-/event_php/template/template.less
+/template/template.less
 
 - Create a file for custom js
-/event_php/template/template.js
+/template/template.js
 
-- create a /index.php with something like this
+- create a index.php with something like this
 
 ```
 <?php 
@@ -35,7 +33,7 @@ $E->HTML->head();
 
 //your content here
 
-$E->form("REGÍSTRATE");
+$E->form();
 
 //Other infos
 $E->program();
@@ -44,16 +42,4 @@ $E->HTML->bottom();
 ?>
 ```
 
-- Create the files in the event_php folder with settings.xml and program.xml, (use the templates as reference)
-
-- Create a .htaccess at root so the ics files get processed with this:
-```
-<IfModule mod_rewrite.c>
-    RewriteEngine On
-    RewriteBase /
-    RewriteRule ^index\.php$ - [L]
-    RewriteCond %{REQUEST_FILENAME} !-f
-    RewriteCond %{REQUEST_FILENAME} !-d
-    RewriteRule . /index.php [L]
-</IfModule>
-```
+- Create the files in the eventphp root settings.xml and program.xml, use the templates as reference
