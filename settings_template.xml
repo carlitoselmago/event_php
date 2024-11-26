@@ -10,6 +10,7 @@
     <city>Barcelona</city>
     <adress>Carrer</adress>
     <venue>Sala d’actes ajuntament</venue>
+    <embed>https://www.youtube.com/embed/yourvideoid</embed>
   </event>
 
   <messages>

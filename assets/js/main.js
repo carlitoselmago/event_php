@@ -3,10 +3,10 @@ $(document).ready(function() {
     // Acción para abrir el formulario y añadir el botón de cerrar
     $(".openform").click(function(event) {
         event.preventDefault(); // Evita el comportamiento por defecto del enlace
-        $(".form").css("display","flex"); // Alterna la visibilidad del formulario
+        $(".registerform").css("display","flex"); // Alterna la visibilidad del formulario
 
         // Comprueba si el formulario está visible y añade el botón de cerrar
-        if ($(".form").is(":visible")) {
+        if ($(".registerform").is(":visible")) {
             // Añadir el botón de cerrar solo si no existe ya
             if (!$(".close-btn").length) {
                 const closeButton = `
@@ -17,22 +17,22 @@ $(document).ready(function() {
                         </svg>
                     </div>
                 `;
-                $(".form").prepend(closeButton);
+                $(".registerform").prepend(closeButton);
             }
         }
     });
 
     // Acción para cerrar el formulario al hacer clic en el botón de cerrar
     $(document).on("click", ".close-btn", function() {
-        $(".form").hide(); // Esconde el formulario
+        $(".registerform").hide(); // Esconde el formulario
         $(".close-btn").remove(); // Elimina el botón de cerrar
     });
 
     // Acción para cerrar el formulario al hacer clic fuera de <form> pero dentro de .form
-    $(".form").on("click", function(event) {
+    $(".registerform").on("click", function(event) {
         // Cierra el formulario solo si el clic fue en .form y no dentro de <form>
-        if ($(event.target).is(".form")) {
-            $(".form").hide(); // Esconde el formulario
+        if ($(event.target).is(".registerform")) {
+            $(".registerform").hide(); // Esconde el formulario
             $(".close-btn").remove(); // Elimina el botón de cerrar
         }
     });

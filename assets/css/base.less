@@ -48,6 +48,15 @@ nav{
 .close-btn path{
    stroke: black;
 }
+
+.btn-big{
+    padding: 10px 50px;
+    font-size: 28px;
+    &:hover{
+        cursor: pointer;
+    }  
+}
+
 .form {
     display: none;
     position: fixed;
@@ -70,7 +79,26 @@ nav{
     &.show {
         display: flex;
     }
+    &.inlineform{
+            display: flex;
+            backdrop-filter: none;
+            position: relative;
 
+            .field{
+                display: flex;
+                label{
+                    text-align: center;
+                }
+            }
+            .btn{
+                font-family: inherit ;
+                font-weight: inherit ;
+                border: inherit;
+                background-color: inherit;
+                color: inherit;
+                border:solid 1px white;
+            }
+    }
     .field {
         display: flex;
         margin-bottom: 16px;
@@ -93,16 +121,11 @@ nav{
             border: none;
             padding: 10px;
 
-            &[type="submit"]{
-                padding: 10px 50px;
-                font-size: 28px;
-                &:hover{
-                    cursor: pointer;
-                }
-            }
+           
         }
-    }
 
+    }
+    
     form,
     .message {
         
@@ -201,5 +224,15 @@ nav{
     display: flex;
     &.vertical{
         flex-direction: column;
+    }
+}
+
+
+.embed{
+    iframe{
+        width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 9;
+  max-width: 100vw;
     }
 }

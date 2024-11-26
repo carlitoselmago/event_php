@@ -43,3 +43,4 @@ $E->HTML->bottom();
 ```
 
 - Create the files in the eventphp root settings.xml and program.xml, use the templates as reference
+- If it's an streaming event you should fill the <embed> setting, otherwise it won't show the mecanisms for accessing the video

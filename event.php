@@ -17,11 +17,12 @@ class Event{
     private $validPasswords = array('accesosi');
 
      function __construct() {
+        session_start();
         $this->loadSettings($this->settings_path);
         include_once(__DIR__."/html.php");
         $this->HTML=new html($this);
         $this->urlManager();
-
+        
         //load locale
         include_once __DIR__."/locale.php";
      }
@@ -40,7 +41,7 @@ class Event{
     function form($action="Regístrat",$before="",$after=""){
 
         //check if form is sent
-        if($_SERVER['REQUEST_METHOD'] == 'POST'){
+        if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST["userregister"])){
 
             if ($this->processForm()){
                
@@ -55,10 +56,47 @@ class Event{
             }
 
         } else {
+            if ($this->settings->event->embed !=""){
+                //if it has an streaming url
+                if ($this->hasstarted()){
+                    //event is between the morning of the event and the end
+                    echo '<div class="form inlineform" >';
+                    echo '<form method="POST" action="stream" >';
+                    echo '<div class="field">';
+                    echo '<label for="emailviewer">'.$this->__("registeredmail").'</label>';
+                    echo '<input id="emailviewer" name="emailviewer" type="email"><br>';
+                    echo '</div>';
+                    echo '<input type="submit" class="btn btn-big" value="'.$this->__("continuar").'">';
+                    echo '<input type="hidden" name="viewerlogin" value="viewerlogin">';
+                   
+                    echo '</form>';
 
-           
+                    echo '</div>';
 
-            echo '<div class="form"><form action="#" method="post">'.$before; //this line starts the form
+                    echo '<br><br><div class="field">';
+                    echo '<p>'.$this->__("ifnoremember").'</p>';
+                    echo '</div>';
+
+                    //echo '<a href="stream" class="btn btn-big">'.$this->__("entrar").'</a>';
+                    $this->registerform($action,$before,$after);
+                } else {
+                    //not yet started
+                    $this->registerform($action,$before,$after);
+                }
+            } else {
+                //event started but it's IRL
+                $this->registerform($action,$before,$after);
+            }
+        }
+    }
+
+    function registerform($action="Regístrat",$before="",$after=""){
+        //check if we are in event time or not
+        $destination="#";
+        if ($this->hasstarted()){
+            $destination="stream";
+        }
+        echo '<div class="form registerform"><form action="'.$destination.'" method="post">'.$before; //this line starts the form
             foreach($this->settings->fields->field as $f)
             {   
                 echo '<div class="field '.$f->type.'">';
@@ -79,14 +117,12 @@ class Event{
                 echo '</div>';
             }
             echo '<div class="field submit">';
-            echo '<input class="btn" type="submit" >'; //this line creates a submit button
+            echo '<input  type="hidden" name="userregister" value="1" >'; 
+            echo '<input class="btn" type="submit" value="'.$this->__("continuar").'">'; 
             echo '</div>';
-            echo '</form>'.$after.'</div>'; //this line ends the form
+            echo '</form>'.$after.'</div>'; 
 
             echo '<a href="#" class="btn btn-big openform">'.$action.'</a>';
-
-            
-        }
     }
 
     function program(){
@@ -132,7 +168,7 @@ class Event{
             }
         }
 
-        $this->createTableIfnotExists($this->settings->database->table->__toString());
+        $this->createTableIfnotExists($this->settings->database->table->__toString(),$this->settings->fields->field);
         
         //INSERT user
         $query='INSERT INTO '.$this->settings->database->table.' ( ';
@@ -150,7 +186,9 @@ class Event{
         
         
         //check if it's already inserted (page refresh)
-        if (!$this->rowExists($fields)){
+            
+        if (!$this->getUserId($fields["email"])){
+        //if (!$this->rowExists($fields)){
             $res=mysqli_query($this->db(),$query);
             
             //send an email to the user with the OK text
@@ -167,6 +205,38 @@ class Event{
         return true;
     }
 
+    private function emailexists($email){
+        if ( $this->rowExists(["email"=>$email])){
+            return true;
+        }
+        return false;
+    }
+
+    
+    
+    public function UserTrack($userid)
+    {
+        $userid=(int)$userid;
+    
+        // Prepare the table name dynamically
+        $table = $this->settings->database->table . '_tracking';
+    
+        // Cast $userid to an integer to ensure safety
+        $userid = (int)$userid;
+    
+        // Insert a new row into the tracking table
+        $insertQuery = "INSERT INTO $table (userid, visionado) VALUES ($userid, 1)";
+    
+        if (!mysqli_query($this->db(), $insertQuery)) {
+            // Log or handle the error
+            error_log("Error inserting new record: " . mysqli_error($this->db()));
+        } else {
+            // Optionally log success
+            error_log("User tracking initialized successfully for user ID $userid.");
+        }
+    }
+    
+
     private function rowExists($data) {
         $query = "SELECT * FROM ".$this->settings->database->table->__toString()." WHERE ";
         $conditions = [];
@@ -176,12 +246,32 @@ class Event{
         }
     
         $query .= implode(' AND ', $conditions);
+
         $result = $this->db()->query($query);
     
         return ($result && $result->num_rows > 0);
     }
 
-    function createTableIfnotExists($tableName) {
+    function getUserId($email) {
+        // Sanitize email input to prevent SQL injection
+        $email = mysqli_real_escape_string($this->db(), $email);
+    
+        // Prepare and execute the query
+        $query = "SELECT id FROM " . $this->settings->database->table . " WHERE email = '$email' LIMIT 1";
+        $result = mysqli_query($this->db(), $query);
+    
+        // Check if a row was returned
+        if ($result && mysqli_num_rows($result) > 0) {
+            // Fetch the row as an associative array
+            $row = mysqli_fetch_assoc($result);
+            return (int)$row['id']; // Return the userId as an integer
+        } else {
+            // Return null if no user was found
+            return null;
+        }
+    }
+
+    function createTableIfnotExists($tableName,$fields) {
         try {
             // Check if the table exists
             $check = mysqli_query($this->db(), "SELECT 1 FROM `$tableName` LIMIT 1");
@@ -191,14 +281,19 @@ class Event{
             $query = "CREATE TABLE IF NOT EXISTS `$tableName` (id INT AUTO_INCREMENT PRIMARY KEY";
     
             // Loop over the fields
-            foreach ($this->settings->fields->field as $field) {   
-                $fieldName = $field->name;
+            foreach ($fields as $field) {   
+                $fieldName = $field["name"];
                 $type = 'VARCHAR(255)'; // Default data type
     
-                if ($field->type == 'email' || $field->type == 'textarea') {
+                if ($field["type"] == 'email' || $field["type"] == 'textarea') {
                     $type = 'TEXT';
-                } elseif ($field->type == 'phone') {
+                } elseif ($field["type"] == 'phone') {
                     $type = 'VARCHAR(30)';
+                } elseif ($field["type"] == 'number') {
+                    $type = 'INT';
+               
+                } elseif ($field["type"] == 'createdon') {
+                    $type = 'TIMESTAMP DEFAULT CURRENT_TIMESTAMP';
                 }
     
                 $query .= ", `$fieldName` $type";
@@ -219,7 +314,7 @@ class Event{
     public function ical(){
         $event=$this->settings->event;
         $ical=$this->createICS($event);
-        //$this->var_dump($event);
+
         header("Content-Type: text/plain");  // Use text/calendar if you want to open it directly in calendar
         header('Content-Disposition: attachment; filename="event.ics"');
         //header("Content-Length: " . strlen($data));
@@ -268,23 +363,109 @@ class Event{
         return $icsContent;
     }
 
+    public function viewerlogged(){
+       
+        if (isset($_SESSION["viewerlogged"])){
+            return true;
+        }
+        return false;
+    }
+
+    public function streampage(){
+        $this->HTML->head();
+        include_once __DIR__."/locale.php";
+        
+        if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST["userregister"])){
+            if ($this->processForm()){
+                $_SESSION["viewerlogged"]=true;
+                $userid=$this->getUserId($_POST["email"]);
+                setcookie("viewerid",$userid, time()+3600*5);
+            } else {
+                echo '<div class="message ko"><h3>'.$this->settings->messages->ko.'</h3></div>';
+                unset($_SESSION["viewerlogged"]);
+            }
+        }
+
+        if (isset($_POST["viewerlogin"])){
+            //check if email is on the DB
+            
+            if ($this->emailexists($_POST["emailviewer"])){
+                $_SESSION["viewerlogged"]=true;
+                $userid=$this->getUserId($_POST["emailviewer"]);
+                setcookie("viewerid",$userid, time()+3600*5);
+            }
+        }
+
+        $haslogged=$this->viewerlogged();
+      
+        if ($haslogged){
+            $fields=[["name"=>"visionado","type"=>"number"],["name"=>"userid","type"=>"int"],["name"=>"createdon","type"=>"createdon"]];
+            $this->createTableIfnotExists($this->settings->database->table."_tracking",$fields);
+            $this->UserTrack($_COOKIE["viewerid"]);
+            echo '<div class="theater">';
+            echo '<div class="c embed">';
+            echo '<iframe width="1236" height="695" src="'.$this->settings->event->embed.'" title="'.$this->settings->title.'" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>';
+            echo '<div></div>';
+            echo '<script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>';
+            echo '<script src="'.$this->HTML->assets.'js/stream.js" ></script>';
+        } else {
+            //show form with actions;
+            echo '<div class="container c">';
+            echo '<div class="intro center">';
+            echo '<p>Para poder acceder necesitas registrarte.</p>';
+            $this->registerform($this->__("registrar"));
+            //$this->form($action=$this->__("registrar"));
+            echo '<div></div>';
+        }
+  
+
+        $this->HTML->bottom();
+    }
+
+    // Check if current date (ignoring time) is between datestart (without time) and dateend
+    public function hasstarted() {
+        $event = $this->settings->event;
+        $datestart = (new DateTime($event->datestart))->setTime(0, 0, 0); // Strip time from datestart
+        $dateend = new DateTime($event->dateend); // Keep full dateend (includes time)
+        $currentDate = (new DateTime())->setTime(0, 0, 0); // Current date without time
+
+        return $currentDate >= $datestart && $currentDate <= $dateend;
+    }
+
     /***URL MANAGEMENT***/
 
     function urlManager(){
+        // Get the request URI
         $url = $_SERVER['REQUEST_URI']; 
+        
+        // Remove the subfolder path (RewriteBase)
+        $basePath = dirname($_SERVER['SCRIPT_NAME']); // e.g., /ivhees
+        if (strpos($url, $basePath) === 0) {
+            $url = substr($url, strlen($basePath));
+        }
+    
+        // Trim leading/trailing slashes and split the URL into parts
+        $url = trim($url, "/");
         $parts = explode("/", $url);
-        //$this->var_dump($parts);
-
-        if (strlen($parts[1])>0){
-            switch($parts[1]){
+    
+        // Debugging: Dump parts for testing
+       
+    
+        // Check if the last part of the URL is valid
+        if (!empty($parts[0])) {
+            switch($parts[0]) {
                 case "ics":
                     $this->ical();
                     die();
                     break;
+                case "stream":
+                    $this->streampage();
+                    die();
+                    break;
             }
         }
-
     }
+    
 
     /**ADMIN*** */
 

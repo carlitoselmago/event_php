@@ -1,7 +1,7 @@
 <?php
 class HTML{
     public $E; 
-    private $assets="/event_php/assets/";
+    public $assets="event_php/assets/";
     public $template="event_php/template/";
 
     function __construct($E) {
@@ -23,12 +23,12 @@ class HTML{
             echo '
             <link rel = "stylesheet/css" type="text/css" href="'.$this->assets.'css/fonts/fonts.css" />
             <link rel = "stylesheet/less" type="text/css" href="'.$this->assets.'css/base.less" />
-            <link rel = "stylesheet/less" type="text/css" href="/'.$this->template.'fonts/fonts.css" />
-            <link rel = "stylesheet/less" type="text/css" href="/'.$this->template.'template.less" />
+            <link rel = "stylesheet/less" type="text/css" href="'.$this->template.'fonts/fonts.css" />
+            <link rel = "stylesheet/less" type="text/css" href="'.$this->template.'template.less" />
             <script src="'.$this->assets.'js/less.js" ></script>
             <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
             <script src="'.$this->assets.'js/main.js" ></script>
-            <script src="/'.$this->template.'template.js" ></script>
+            <script src="'.$this->template.'template.js" ></script>
             
         </head>
         <body>
