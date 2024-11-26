@@ -9,7 +9,8 @@ $this->locale=[
         "entrar"=>"ACCEDIR",
          "registeredmail"=>"Introdueix el correu electrònic amb el qual et vas registrar",
           "ifnoremember"=>"Si no recordes el correu electrònic que vas utilitzar, pots registrar-te amb el botó a continuació",
-           "necesitas"=>"Per poder accedir necessites registrar-te"
+           "necesitas"=>"Per poder accedir necessites registrar-te",
+           "emailnotfound"=>"L'adreça de correu no consta com a registrada"
     ],
     "es"=>[
         "continuar"=>"CONTINUAR",
@@ -20,7 +21,8 @@ $this->locale=[
         "registeredmail"=>"Introduce el email con el que te registraste",
         "ifnoremember"=>"Si no recuerdas el email que utilizaste, puedes registrarte con el botón a continuación",
         "necesitas"=>"Para poder acceder necesitas registrarte",
-         "necesitas"=>"Para poder acceder necesitas registrarte"
+         "necesitas"=>"Para poder acceder necesitas registrarte",
+         "emailnotfound"=>"La dirección de correo no consta como registrada"
     ],
     "en"=>[
         "continuar"=>"NEXT",
@@ -30,6 +32,7 @@ $this->locale=[
          "entrar"=>"JOIN",
           "registeredmail"=>"Enter the email with which you registered",
            "ifnoremember"=>"If you don't remember the email you used, you can register with the button below",
-            "necesitas"=>"To access, you need to sign-in"
+            "necesitas"=>"To access, you need to sign-in",
+            "emailnotfound"=>"La dirección de correo no consta como registrada"
     ]
     ];

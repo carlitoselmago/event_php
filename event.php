@@ -379,9 +379,10 @@ class Event{
             if ($this->processForm()){
                 $_SESSION["viewerlogged"]=true;
                 $userid=$this->getUserId($_POST["email"]);
-                setcookie("viewerid",$userid, time()+3600*5);
+                //setcookie("viewerid",$userid, time()+3600*5);
+                $_SESSION["viewerid"]=$userid;
             } else {
-                echo '<div class="message ko"><h3>'.$this->settings->messages->ko.'</h3></div>';
+                echo '<div class="c"><div class="message ko"><h3>'.$this->settings->messages->ko.'</h3></div></div>';
                 unset($_SESSION["viewerlogged"]);
             }
         }
@@ -392,7 +393,11 @@ class Event{
             if ($this->emailexists($_POST["emailviewer"])){
                 $_SESSION["viewerlogged"]=true;
                 $userid=$this->getUserId($_POST["emailviewer"]);
-                setcookie("viewerid",$userid, time()+3600*5);
+                $_SESSION["viewerid"]=$userid;
+                //setcookie("viewerid",$userid, time()+3600*5);
+            } else {
+                echo '<div class="c"><div class="message ko"><h3>'.$this->__("emailnotfound").'</h3></div></div>';
+                unset($_SESSION["viewerlogged"]);
             }
         }
 
@@ -401,7 +406,7 @@ class Event{
         if ($haslogged){
             $fields=[["name"=>"visionado","type"=>"number"],["name"=>"userid","type"=>"int"],["name"=>"createdon","type"=>"createdon"]];
             $this->createTableIfnotExists($this->settings->database->table."_tracking",$fields);
-            $this->UserTrack($_COOKIE["viewerid"]);
+            $this->UserTrack($_SESSION["viewerid"]);
             echo '<div class="theater">';
             echo '<div class="c embed">';
             echo '<iframe width="1236" height="695" src="'.$this->settings->event->embed.'" title="'.$this->settings->title.'" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>';
@@ -594,4 +599,5 @@ class Event{
         return $this->locale[$this->settings->lang->__toString()][$string];
     }
 }
+
 

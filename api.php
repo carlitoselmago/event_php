@@ -7,7 +7,8 @@ include_once("event.php");
 $E = new Event();
 if (isset($_POST["time"])){
   if ($E->hasstarted()){
-    $E->UserTrack($_COOKIE["viewerid"],$_POST["time"]);
+ 
+    $E->UserTrack($_SESSION["viewerid"],$_POST["time"]);
   }
 }
 die();
