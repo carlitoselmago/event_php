@@ -282,7 +282,7 @@ class Event{
     
             // Loop over the fields
             foreach ($fields as $field) {   
-                $fieldName = $field["name"];
+                $fieldName = $field->name;
                 $type = 'VARCHAR(255)'; // Default data type
     
                 if ($field["type"] == 'email' || $field["type"] == 'textarea') {
