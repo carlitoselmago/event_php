@@ -32,11 +32,11 @@ class HTML{
             
         </head>
         <body>
-        <nav >';
+        ';
         
         $this->set_template_chunk($this->template."head.html");
 
-        echo'</nav>
+        echo'
 
         <div id="main">
         <article>
