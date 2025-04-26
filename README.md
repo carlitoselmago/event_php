@@ -16,6 +16,20 @@ The event_php folder has a .htaccess that prevents accessing to xml files (for s
 
 ## Instructions
 
+You should download this repository inside your website root folder, this is not meant to be the root itself.
+
+- Create this .htaccess in your root folder:
+  ```
+  <IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteBase /
+    RewriteRule ^index\.php$ - [L]
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule . /index.php [L]
+  </IfModule>
+  ```
+
 - Create a file for custom css
 /template/template.less
 
