@@ -65,7 +65,7 @@
 
         <field required="false">
           <name>conformitat</name>
-          <label>Accepto</label>
+         <label>Accepto &lt;a href="privacidad"&gt;la política de privacitat&lt;/a&gt;</label>
           <type>checkbox</type>
       </field>
 
