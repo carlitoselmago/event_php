@@ -90,39 +90,51 @@ class Event{
         }
     }
 
-    function registerform($action="Regístrat",$before="",$after=""){
+    function registerform($action="Regístrat", $before="", $after="") {
         //check if we are in event time or not
-        $destination="#";
-        if ($this->hasstarted()){
-            $destination="stream";
+        $destination = "#";
+        if ($this->hasstarted()) {
+            $destination = "stream";
         }
-        echo '<div class="form registerform"><form action="'.$destination.'" method="post">'.$before; //this line starts the form
-            foreach($this->settings->fields->field as $f)
-            {   
-                echo '<div class="field '.$f->type.'">';
-                $required = '';
-                $req='';
-                if($f->attributes()['required'] == 'true') {
-                    $required = 'required';
-                    $req='*';
-                }
-        
-                echo '<label for="'.(string)$f->name.'">'.(string)$f->label.'<span class="asterisk">'.$req.'</span></label>';
-        
-                if($f->type == 'text' || $f->type == 'email' || $f->type == 'phone') {
-                    echo '<input type="'.$f->type.'" id="'.$f->name.'" name="'.$f->name.'" '.$required.'><br>';
-                } elseif($f->type == 'checkbox') {
-                    echo '<input type="checkbox" id="'.$f->name.'" name="'.$f->name.'" '.$required.'><br>';
-                }
-                echo '</div>';
+        echo '<div class="form registerform"><form action="' . $destination . '" method="post">' . $before; // this line starts the form
+    
+        foreach ($this->settings->fields->field as $f) {
+            echo '<div class="field ' . $f->type . '">';
+            $required = '';
+            $req = '';
+            if ($f->attributes()['required'] == 'true') {
+                $required = 'required';
+                $req = '*';
             }
-            echo '<div class="field submit">';
-            echo '<input  type="hidden" name="userregister" value="1" >'; 
-            echo '<input class="btn" type="submit" value="'.$this->__("continuar").'">'; 
+    
+            echo '<label for="' . (string)$f->name . '">' . (string)$f->label . '<span class="asterisk">' . $req . '</span></label>';
+    
+            if ($f->type == 'text' || $f->type == 'email' || $f->type == 'phone') {
+                echo '<input type="' . $f->type . '" id="' . $f->name . '" name="' . $f->name . '" ' . $required . '><br>';
+            } elseif ($f->type == 'checkbox') {
+                echo '<input type="checkbox" id="' . $f->name . '" name="' . $f->name . '" ' . $required . '><br>';
+            } elseif ($f->type == 'select') {
+                echo '<select id="' . $f->name . '" name="' . $f->name . '" ' . $required . '>';
+                if (isset($f->options->option)) {
+                    foreach ($f->options->option as $option) {
+                        $value = (string)$option['value'];
+                        $text = (string)$option;
+                        echo '<option value="' . htmlspecialchars($value) . '">' . htmlspecialchars($text) . '</option>';
+                    }
+                }
+                echo '</select><br>';
+            }
             echo '</div>';
-            echo '</form>'.$after.'</div>'; 
-
-            echo '<a href="#" class="btn btn-big openform">'.$action.'</a>';
+        }
+    
+        echo '<div class="field submit">';
+        echo '<input type="hidden" name="userregister" value="1">'; 
+        echo '<input class="btn" type="submit" value="' . $this->__("continuar") . '">'; 
+        echo '</div>';
+    
+        echo '</form>' . $after . '</div>'; 
+    
+        echo '<a href="#" class="btn btn-big openform">' . $action . '</a>';
     }
 
     function program(){
