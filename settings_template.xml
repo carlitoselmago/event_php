@@ -63,6 +63,16 @@
           <type>phone</type>
       </field>
 
+     <field required="true">
+        <name>asistencia</name>
+          <label>Asistencia</label>
+          <options>
+            <option value="online">Online</option>
+             <option value="presencial">Presencial</option>
+          </options>
+        <type>select</type>
+    </field>
+
         <field required="false">
           <name>conformitat</name>
          <label>Accepto &lt;a href="privacidad"&gt;la política de privacitat&lt;/a&gt;</label>
