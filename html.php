@@ -91,13 +91,14 @@ class HTML{
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
             <!--CSS-->';
             echo '
-            <link rel = "stylesheet/css" type="text/css" href="'.$this->assets.'css/fonts/fonts.css" />
-            <link rel = "stylesheet/less" type="text/css" href="'.$this->assets.'css/admin.less" />
-            <script src="'.$this->assets.'js/less.js" ></script>
+            <link rel = "stylesheet/css" type="text/css" href="/'.$this->assets.'css/fonts/fonts.css" />
+            <link rel = "stylesheet/less" type="text/css" href="/'.$this->assets.'css/admin.less" />
+            <script src="/'.$this->assets.'js/less.js" ></script>
         </head>
         <body>
         <nav >';
     }
+
 
     function admin_bottom(){
         echo '
